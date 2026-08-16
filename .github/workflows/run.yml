@@ -86,3 +86,9 @@ jobs:
           repository: ${{ github.repository }}
           retain_days: 0
           keep_minimum_runs: 50
+      - name: 发送 Server酱 通知 
+        if: failure() # 仅在之前的步骤失败时运行 
+        run: | 
+          curl -sS -X POST "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_SENDKEY }}.send" \ 
+          -d "title=构建失败 ${{ github.repository }}" \ 
+          -d "desp=分支 ${{ github.ref_name }}，提交 ${{ github.sha }}，详情 ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
